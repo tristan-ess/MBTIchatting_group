@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 多人格聊天室 — MBTI Chatroom</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="app-container">
+    <!-- ========== 侧边栏：历史对话 ========== -->
+    <aside class="sidebar">
+        <h3>📜 对话历史</h3>
+        <button class="new-chat-btn" onclick="newChat()">＋ 新建对话</button>
+        <div class="history-list" id="historyList">
+            <div style="color:#555;font-size:12px;padding:8px;">加载中...</div>
+        </div>
+    </aside>
+
+    <!-- ========== 主聊天区 ========== -->
+    <main class="main-area">
+        <div class="header">
+            <h1>🧠 AI <span>多人格</span>聊天室</h1>
+        </div>
+
+        <!-- Tab 栏 -->
+        <div class="tabs">
+            <button class="active" onclick="switchTab('single')">💬 单人私聊</button>
+            <button onclick="switchTab('group')">👥 群聊模式</button>
+            <button onclick="switchTab('debate')">⚔️ 辩论场</button>
+        </div>
+
+        <!-- ===== 单人私聊 ===== -->
+        <div id="singleTab" class="tab-content active">
+            <div class="personality-selector" id="singlePersonalityList"></div>
+            <div class="chat-box" id="singleChatBox"></div>
+            <div class="input-area">
+                <input type="text" id="singleInput" placeholder="输入消息..." onkeydown="if(event.key==='Enter') sendSingle()">
+                <button id="singleSendBtn" onclick="sendSingle()">发送</button>
+            </div>
+        </div>
+
+        <!-- ===== 群聊模式 ===== -->
+        <div id="groupTab" class="tab-content">
+            <div class="personality-selector" id="groupPersonalityList"></div>
+            <div class="chat-box" id="groupChatBox"></div>
+            <div class="input-area">
+                <input type="text" id="groupInput" placeholder="输入消息，所有选中的AI将同时回复..." onkeydown="if(event.key==='Enter') sendGroup()">
+                <button id="groupSendBtn" onclick="sendGroup()">发送</button>
+            </div>
+        </div>
+
+        <!-- ===== 辩论场 ===== -->
+        <div id="debateTab" class="tab-content">
+            <!-- 辩论设置界面 -->
+            <div class="debate-setup" id="debateSetup">
+                <h2>⚔️ 人格辩论场</h2>
+                <p style="color:#888;">选择两个对立人格，设定辩题，观看精彩辩论！</p>
+                <div class="debate-row">
+                    <select id="debatePersonalityA"></select>
+                    <span class="debate-vs">VS</span>
+                    <select id="debatePersonalityB"></select>
+                </div>
+                <input type="text" id="debateTopic" placeholder="输入辩题，例如：AI会取代人类工作吗？">
+                <button class="start-debate-btn" onclick="startDebate()">🔥 开始辩论</button>
+            </div>
+
+            <!-- 辩论进行中界面 -->
+            <div id="debateActive" style="display:none; flex:1; flex-direction:column; overflow:hidden;">
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 20px; background:#0a0a20; border-bottom:1px solid #1e1e3a;">
+                    <span id="debateTopicDisplay" style="font-weight:bold; color:#e94560;"></span>
+                    <span id="debateRound" style="color:#888; font-size:14px;"></span>
+                </div>
+                <div class="chat-box" id="debateChatBox" style="flex:1;"></div>
+                <div class="debate-controls">
+                    <button onclick="nextDebateRound()">▶ 下一回合</button>
+                    <button onclick="resetDebate()">🔄 重新设定</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- 注入人格数据 -->
+<script>
+    const PERSONALITIES = {{ personalities | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+</body>
+</html>
