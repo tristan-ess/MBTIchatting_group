@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 # 自动加载项目根目录的 .env 文件
 load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"))
 
+# 在 .env 文件中设置 DOUBAO_API_KEY=你的密钥
 API_KEY = os.getenv("Your-api-key-here")
 API_URL = os.getenv("Your_API_URL")
 MODEL = os.getenv("Your_MODEL" )
